@@ -1,2 +1,9 @@
 *.pyc
 __pycache__
+
+*.bsp
+*.log
+*.prt
+*.vmf
+*.vmx
+
