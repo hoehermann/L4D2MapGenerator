@@ -43,7 +43,7 @@ def findPortalOnSolid(solid):
       if child.properties["material"] == OUTSIDE_MATERIAL :
         side = child
         break
-  if side == None:
+  if side is None:
     return None
   return side.plane
     
@@ -153,7 +153,7 @@ class MapTile:
   def analyzePortals(self):
     """Find all IDs of solids with a portal and the portals' directions"""
     doors = dict({'north': [], 'east': [], 'south': [], 'west': [], 'up': [], 'down': []})
-    solids = self.map.root.FindRecurse(lambda node : node.name == "solid" and not findPortalOnSolid(node) == None)
+    solids = self.map.root.FindRecurse(lambda node : node.name == "solid" and findPortalOnSolid(node) is not None)
     for solid in solids:
       doors[self.getPortalDirection(findPortalOnSolid(solid))].append(solid.properties["id"])
     self.doors = doors
@@ -200,7 +200,7 @@ class MapTile:
     """Finds a portal on the solid with the given ID."""
     solid = self.map.root.FindRecurse(lambda node : node.name == "solid" and node.properties["id"] == id)[0]
     portal = findPortalOnSolid(solid)
-    if portal == None:
+    if portal is None:
       print "ERROR: Every portal must have a solid having a side with the material "+OUTSIDE_MATERIAL +" marking the outside"
     return portal
     

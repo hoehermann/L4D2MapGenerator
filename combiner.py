@@ -52,7 +52,7 @@ def tryAddTile(base, tile, blockingBoxes):
   """Tries to add a tile by trying one random connection"""
   connections = base.findConnections(tile, TAIL_LENGTH)
   connection = chooseConection(connections)
-  if connection == None:
+  if connection is None:
     return False
   vectors = base.findPortalsAndVector(tile, connection)
   vector = vectors[0]

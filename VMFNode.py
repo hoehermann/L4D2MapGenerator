@@ -46,11 +46,11 @@ class VMFNode:
     """Returns a deep copy of this node"""
     deepcopy = VMFNode(self.name)
     deepcopy.properties = copy.deepcopy(self.properties)
-    if not self.plane == None:
+    if self.plane is not None:
       deepcopy.plane = self.plane.copy()
     else:
       deepcopy.plane = None
-    if not self.origin == None:
+    if self.origin is not None:
       deepcopy.origin = self.origin.copy()
     else:
       deepcopy.origin = None
@@ -148,9 +148,9 @@ class VMFNode:
   
   def TranslateRecurse(self,vector):
     """Recursively translate this node and all child nodes"""
-    if not self.origin == None:
+    if self.origin is not None:
       self.translateOrigin(vector)
-    elif not self.plane == None:
+    elif self.plane is not None:
       self.translatePlane(vector)
       self.TranslateMaterial(vector)
     for child in self.children:
@@ -159,20 +159,20 @@ class VMFNode:
       
   def ToStringRecurse(self,depth):
     """Recursively print out this node and all child nodes in VMF compatible format"""
-    if not self.name == None:
+    if self.name is not None:
       output = indent(depth) + self.name + "\n" + indent(depth) +"{\n"
       for key, value in self.properties.items():
         output += indent(depth+1) + "\""+key+"\" \""+value+"\"\n"
-      if not self.origin == None:
+      if self.origin is not None:
         output += indent(depth+1) + "\"origin\" \""+self.GetOrigin()+"\"\n"
-      if not self.plane == None:
+      if self.plane is not None:
         output += indent(depth+1) + "\"plane\" \""+self.GetPlane()+"\"\n"
     else:
       output = ""
       depth -= 1
     for child in self.children:
       output += child.ToStringRecurse(depth+1)
-    if not self.name == None:
+    if self.name is not None:
       output += indent(depth) + "}\n"
     return output
     
@@ -245,12 +245,12 @@ class VMFNode:
   def GetBoundsRecurse(self):
     """Get this map's bounding box by recursively searching for the outmost bounds"""
     bounds = None
-    if not self.plane == None:
+    if self.plane is not None:
       bounds = getBounds(self.plane)
     for child in self.children:
       childBounds = child.GetBoundsRecurse()
-      if not childBounds == None:
-        if bounds == None:
+      if childBounds is not None:
+        if bounds is None:
           bounds = childBounds
         else:
           combined = numpy.append(childBounds,bounds).reshape((4,3))

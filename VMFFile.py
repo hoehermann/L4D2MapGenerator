@@ -18,7 +18,7 @@ class VMFFile:
     previousLine = None
     line = file.readline().strip()
     while line:
-      if not previousLine == None:
+      if previousLine is not None:
         line = line.strip()
         if line == "{":
           stack.append(node)
