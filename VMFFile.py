@@ -32,7 +32,7 @@ class VMFFile:
           if len(split) == 2:
             node.AddProperty(split[0].strip("\""),split[1].strip("\""))
           else:
-            print "WARNING: Unknown token number",len(split),"in",split
+            print("WARNING: Unknown token number",len(split),"in",split)
       previousLine = line
       line = file.readline()
     #print "Final depth:",len(stack)

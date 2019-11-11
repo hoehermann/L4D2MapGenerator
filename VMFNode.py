@@ -23,8 +23,8 @@ def getBounds(points):
   
 def planeNormal(plane):
   """Returns the normal vector for the given plane specified by three 3D points"""
-  normal = numpy.cross(plane[0]-plane[1],plane[2]-plane[0])
-  normal /= numpy.max(numpy.absolute(normal))
+  normal = numpy.cross(plane[0]-plane[1],plane[2]-plane[0])  magnitude = numpy.max(numpy.absolute(normal))
+  normal //= magnitude 
   # [0 -1 0] -> south, [0 1 0] -> north
   # redundant? is it in vaxis and uaxis?
   return normal
@@ -96,7 +96,7 @@ class VMFNode:
       
   def SetPlane(self,plane):
     """Sets the node's plane property to the given string"""
-    plane = plane.translate(None,"()")
+    plane = plane.translate({ord(c): None for c in "()"})
     self.plane = numpy.int_(numpy.rint(numpy.fromstring(plane, dtype=float, sep=' ')).reshape((3,3)))
     
   def GetPlane(self):
@@ -132,8 +132,8 @@ class VMFNode:
       self.shiftMaterial("uaxis", vector[1]) # shift X
     else:
       if not self.properties["material"] == "TOOLS/TOOLSNODRAW":
-        print normal
-        print "WARNING: Not shifting plane with material",self.properties["material"],"and normals",self.properties["uaxis"],self.properties["vaxis"]
+        print(normal)
+        print("WARNING: Not shifting plane with material",self.properties["material"],"and normals",self.properties["uaxis"],self.properties["vaxis"])
     # if self.properties["uaxis"][:7] == "[1 0 0 " and self.properties["vaxis"][:7] == "[0 -1 0":
       # self.shiftMaterial("uaxis", vector[0]) # total guess
       # self.shiftMaterial("vaxis", vector[1]) # total guess
@@ -161,7 +161,7 @@ class VMFNode:
     """Recursively print out this node and all child nodes in VMF compatible format"""
     if self.name is not None:
       output = indent(depth) + self.name + "\n" + indent(depth) +"{\n"
-      for key, value in self.properties.items():
+      for key, value in list(self.properties.items()):
         output += indent(depth+1) + "\""+key+"\" \""+value+"\"\n"
       if self.origin is not None:
         output += indent(depth+1) + "\"origin\" \""+self.GetOrigin()+"\"\n"
