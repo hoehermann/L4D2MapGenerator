@@ -58,6 +58,10 @@ def tryAddTile(base, tile, blockingBoxes):
     return False
   vectors = base.findPortalsAndVector(tile, connection)
   vector = vectors[0]
+  if vector is None:
+    print("Portal size mismatch")
+    # TODO: check for portal size match in findConnections
+    return False
   translatedBounds = MapTile.translateBounds(tile.bounds,vector)
   if collide(translatedBounds, blockingBoxes):
     print("Tiles collide")
