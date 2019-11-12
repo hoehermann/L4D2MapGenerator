@@ -129,7 +129,7 @@ class MapTile:
     if portalSize[0] == 0:
       if portalBounds[0][0] == self.bounds[1][0]:
         return "east"
-      elif portalBounds[0][2] == self.bounds[0][0]:
+      elif portalBounds[0][0] == self.bounds[0][0]:
         return "west"
       else:
         raise AssertionError("Invalid portal plane "+str(portalBounds.tolist())+" neither bound matches "+str(self.bounds.tolist())+" in "+self.filename)
