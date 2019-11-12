@@ -96,7 +96,7 @@ class VMFNode:
       
   def SetPlane(self,plane):
     """Sets the node's plane property to the given string"""
-    plane = plane.translate({ord(c): None for c in "()"})
+    plane = plane.translate({ord(c): None for c in "()"}) # strip parentheses
     self.plane = numpy.int_(numpy.rint(numpy.fromstring(plane, dtype=float, sep=' ')).reshape((3,3)))
     
   def GetPlane(self):
