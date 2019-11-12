@@ -180,7 +180,7 @@ class VMFNode:
     """Recursively increase VMF/Hammer IDs of this node and all child nodes"""
     if "id" in self.properties:
       self.properties["id"] = str(int(self.properties["id"]) + increase)
-    if "sides" in self.properties:
+    if "sides" in self.properties and self.properties["sides"]:
       sides = self.properties["sides"].split(" ")
       self.properties["sides"] = ""
       for side in sides:
