@@ -2,6 +2,8 @@ import MapTile
 from VMFNode import vectorToString
 import os
 import random
+import argparse
+
 
 """
 This proof-of-concept random map generator for Left 4 Dead 2 (and other Hammer based maps) loads map tiles from VMF files and puts them together randomly.
@@ -106,7 +108,13 @@ def loadTiles(path):
     
 if __name__ == "__main__":
   """Main program"""
-  starts, tiles, finales = loadTiles("tiles/office/")
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--tilesdir", help="directory to load the tiles from", default="tiles/office/")
+  parser.add_argument("--cfgfile", help="path to store the script for generating the navigation mesh to", default="../../../left4dead2/cfg/combined.cfg")
+  args = parser.parse_args()
+  
+  starts, tiles, finales = loadTiles(args.tilesdir)
   base = random.choice(starts)
   finale = random.choice(finales)
   blockingBoxes = [base.bounds]
@@ -130,6 +138,9 @@ if __name__ == "__main__":
   file.write(base.map.root.ToStringRecurse(0))
   file.close()
 
-  file = open("../../../left4dead2/cfg/combined.cfg","w")
-  file.write(base.generateNavMeshScript())
-  file.close()
+  try:
+    file = open(args.cfgfile,"w")
+    file.write(base.generateNavMeshScript())
+    file.close()
+  except IOError:
+    print("Could not write %s."%(args.cfgfile))
