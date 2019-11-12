@@ -132,23 +132,23 @@ class MapTile:
       elif portalBounds[0][2] == self.bounds[0][0]:
         return "west"
       else:
-        raise AssertionError("Invalid portal plane "+str(portalBounds)+" neither bound matches "+str(self.bounds))
+        raise AssertionError("Invalid portal plane "+str(portalBounds.tolist())+" neither bound matches "+str(self.bounds.tolist())+" in "+self.filename)
     elif portalSize[1] == 0:
       if portalBounds[0][1] == self.bounds[1][1]:
         return "north"
       elif portalBounds[0][1] == self.bounds[0][1]:
         return "south"
       else:
-        raise AssertionError("Invalid portal plane "+str(portalBounds)+" neither bound matches "+str(self.bounds))
+        raise AssertionError("Invalid portal plane "+str(portalBounds.tolist())+" neither bound matches "+str(self.bounds.tolist())+" in "+self.filename)
     elif portalSize[2] == 0:
       if portalBounds[0][2] == self.bounds[1][2]:
         return "up"
       elif portalBounds[0][2] == self.bounds[0][2]:
         return "down"
       else:
-        raise AssertionError("Invalid portal plane "+str(portalBounds)+" neither bound matches "+str(self.bounds))
+        raise AssertionError("Invalid portal plane "+str(portalBounds.tolist())+" neither bound matches "+str(self.bounds.tolist())+" in "+self.filename)
     else:
-      raise AssertionError("Invalid portal plane "+str(portalBounds))
+      raise AssertionError("Invalid portal plane "+str(portalBounds.tolist())+" in "+self.filename)
   
   def analyzePortals(self):
     """Find all IDs of solids with a portal and the portals' directions"""
