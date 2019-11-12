@@ -9,8 +9,6 @@ import argparse
 This proof-of-concept random map generator for Left 4 Dead 2 (and other Hammer based maps) loads map tiles from VMF files and puts them together randomly.
 """
 
-random.seed(421) # This random seed affects the selection of tiles and connections. A change leads to a completely different map layout.
-NUMBER_OF_TILES = 19 # How many tiles there should be in the map.
 TAIL_LENGTH = 3 # The number of portals considered to be the tail of the map. Greater values produce more dead ends.
 
 def chooseConection(connections):
@@ -116,7 +114,11 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--tilesdir", help="directory to load the tiles from", default="tiles/office/")
   parser.add_argument("--cfgfile", help="path to store the script for generating the navigation mesh to", default="../../../left4dead2/cfg/combined.cfg")
+  parser.add_argument("--outfile", help="path to store the output file to", default="combined.vmf")
+  parser.add_argument("--seed", help="Seed to initialize the pseudo-random number generator with. This random seed affects the selection of tiles and connections. Different values lead to completely different map layouts.", default=42)
+  parser.add_argument("--tilecount", help="How many tiles there should be in the map.", default=19)
   args = parser.parse_args()
+  random.seed(args.seed)
   
   starts, tiles, finales = loadTiles(args.tilesdir)
   base = random.choice(starts)
@@ -124,10 +126,10 @@ if __name__ == "__main__":
   blockingBoxes = [base.bounds]
 
   tilesAdded = 0
-  for i in range(NUMBER_OF_TILES*len(tiles)):
+  for i in range(args.tilecount*len(tiles)):
     if selectAndTryToAddTile(base, tiles, blockingBoxes):
       tilesAdded += 1
-    if tilesAdded == NUMBER_OF_TILES:
+    if tilesAdded == args.tilecount:
       break
   print(tilesAdded,"tiles added")
       
@@ -138,13 +140,14 @@ if __name__ == "__main__":
     
   base.close()
 
-  file = open("combined.vmf","w")
+  file = open(args.outfile,"w")
   file.write(base.map.root.ToStringRecurse(0))
   file.close()
 
-  try:
-    file = open(args.cfgfile,"w")
-    file.write(base.generateNavMeshScript())
-    file.close()
-  except IOError:
-    print("Could not write %s."%(args.cfgfile))
+  if args.cfgfile:
+    try:
+      file = open(args.cfgfile,"w")
+      file.write(base.generateNavMeshScript())
+      file.close()
+    except IOError:
+      print("Could not write %s."%(args.cfgfile))
