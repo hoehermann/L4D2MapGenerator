@@ -18,7 +18,7 @@ def chooseConection(connections):
     portal = random.choice(direction[1])
     otherPortal = random.choice(direction[2])
     connection = (direction[0],portal,otherPortal)
-    print("Chose connection",connection)
+    print("Chose connection %s"%(connection,))
     return connection
   else:
     return None
@@ -72,7 +72,7 @@ def tryAddTile(base, tile, blockingBoxes):
 def selectAndTryToAddTile(base, tiles, blockingBoxes):
   """Selects a random tile and tries to add it to the map"""
   tile = random.choice(tiles)
-  print("Chose tile",os.path.basename(tile.filename))
+  print("Chose tile "+os.path.basename(tile.filename))
   success = tryAddTile(base, tile, blockingBoxes)
   if success and tile.getOnce():
     tiles.remove(tile)
@@ -88,7 +88,7 @@ def loadTiles(path):
   for filename in sorted(listing):
     if filename[-3:] == "vmf":
       basename = os.path.basename(filename)
-      print("Loading",basename)
+      print("Loading "+basename)
       maptile = MapTile.MapTile()
       maptile.fromfile(path+filename)
       if filename[:5] == "start":
@@ -101,7 +101,7 @@ def loadTiles(path):
         tiles.append(maptile)
         try: 
           repeat = int(basename.split('_')[0])
-          print("Tile is", repeat, "times more likely to be chosen.")
+          print("Tile is %d times more likely to be chosen."%(repeat))
           for i in range(repeat):
             tiles.append(maptile)
         except ValueError:
@@ -131,7 +131,7 @@ if __name__ == "__main__":
       tilesAdded += 1
     if tilesAdded == args.tilecount:
       break
-  print(tilesAdded,"tiles added")
+  print("%d tiles added"%(tilesAdded))
       
   if not addTile(base, finale, blockingBoxes):
     print("ERROR: Failed to append final \"finale\" tile.")

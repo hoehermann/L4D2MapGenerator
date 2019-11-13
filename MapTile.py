@@ -180,7 +180,7 @@ class MapTile:
         if len(otherDoorList) > 0:
           #print "Other map has a door in opposite direction"
           connections.append((direction,doorList,otherDoorList))
-    print("Have",len(connections),"possible connections")
+    print("Have %d possible connections"%(len(connections)))
     return connections
     
   def findPortalsAndVector(self, otherMap, connection):
@@ -210,27 +210,27 @@ class MapTile:
     
     if not otherMap == self:
       removed = otherMap.map.root.DeleteRecurse(lambda node : "classname" in node.properties and node.properties["classname"] == "info_player_start")
-      print("Removed",removed,"info_player_start from other map")
+      print("Removed %d info_player_start from other map"%(removed))
       removed = otherMap.map.root.DeleteRecurse(lambda node : "classname" in node.properties and node.properties["classname"] == "prop_door_rotating" and pointNearPlane(node.origin,otherMapPortal))
-      print("Removed",removed,"doors from other map")
+      print("Removed %d doors from other map"%(removed))
     removed = otherMap.map.root.DeleteRecurse(lambda node : node.name == "solid" and node.properties["id"] == connection[2])
-    print("Removed",removed,"solids from other map")
+    print("Removed %d solids from other map"%(removed))
     otherMap.doors[oppositeDirection(connection[0])].remove(connection[2])
       
     entities = self.map.root.FindRecurse(lambda node : node.name == "entity" and not node.properties["classname"] == "func_detail" and pointNearPlane(node.origin,mapPortal))
     removed = 0
     for entity in entities:
       removed += entity.DeleteRecurse(lambda node : node.name == "editor")
-    print("Removed",removed,"editor information from remaining entities in base map")
+    print("Removed %d editor information from remaining entities in base map"%(removed))
     removed = self.map.root.DeleteRecurse(lambda node : node.name == "solid" and node.properties["id"] == connection[1])
-    print("Removed",removed,"solids from base map")
+    print("Removed %d solids from base map"%(removed))
     self.doors[connection[0]].remove(connection[1])
 
     if not otherMap == self:
       maxId = self.map.root.GetMaximumIdRecurse(0)
       otherMap.map.root.IncreaseIdRecurse(maxId)
-      print("Increased IDs in other map by",maxId)
-      print("Translating other map with vector",vector,"...")
+      print("Increased IDs in other map by %d"%(maxId))
+      print("Translating other map with vector %s..."%(vector))
       otherMap.translate(vector)
       print("Adding other map...")
       self.map.root.AddOtherMap(otherMap.map.root)
@@ -267,7 +267,7 @@ class MapTile:
         for doorNode in doorNodes:
           portalBounds = getBounds(findPortalOnSolid(doorNode))
           removed += self.map.root.DeleteRecurse(lambda node : "classname" in node.properties and node.properties["classname"] == "prop_door_rotating" and pointNearPlane(node.origin,portalBounds))
-    print("Removed",removed,"doors to close map")
+    print("Removed %d doors to close map"%(removed))
       
   def generateNavMeshScript(self):
     """Generate a config file for generating the nav mesh in game."""
